@@ -1,0 +1,12 @@
+# Entornos y secretos
+.env
+.venv/
+env/
+venv/
+__pycache__/
+*.pyc
+
+# Logs y temporales
+*.log
+.DS_Store
+Thumbs.db

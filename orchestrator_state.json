@@ -1,0 +1,75 @@
+{
+  "niche_analysis_done": true,
+  "topics": [
+    {
+      "id": 1,
+      "ep_number": 5,
+      "title": "El estoicismo mal entendido: Dominar tus emociones vs reprimirlas hasta enfermarte",
+      "research_done": true,
+      "research_url": "https://docs.google.com/open?id=1bti6WXk65cvixLlCisGwW16tt0Gv3vX_mOAGPON5sok",
+      "script_done": true,
+      "script_approved": true,
+      "script_url": "https://docs.google.com/open?id=1vKAPALPLT3k8wZOMr4ZO6vzYJ_PddRC0DuKHcCzgA3I",
+      "script_file_id": "1vKAPALPLT3k8wZOMr4ZO6vzYJ_PddRC0DuKHcCzgA3I",
+      "social_done": true,
+      "social_url": "https://docs.google.com/open?id=1HK11DbZ4n3ohUIcAOHnJf_4gVdhV0AmmmCsYIKvGX6I",
+      "completed": true
+    },
+    {
+      "id": 2,
+      "ep_number": 6,
+      "title": "La recesión de la amistad masculina: Por qué los hombres dejamos de hacer amigos reales a los 25 años y cómo romper el aislamiento",
+      "research_done": false,
+      "research_url": null,
+      "script_done": false,
+      "script_approved": false,
+      "script_url": null,
+      "script_file_id": null,
+      "social_done": false,
+      "social_url": null,
+      "completed": false
+    },
+    {
+      "id": 3,
+      "ep_number": 7,
+      "title": "La trampa del proveedor y el silencio de las deudas: Cómo la presión financiera destruye la salud mental del hombre",
+      "research_done": false,
+      "research_url": null,
+      "script_done": false,
+      "script_approved": false,
+      "script_url": null,
+      "script_file_id": null,
+      "social_done": false,
+      "social_url": null,
+      "completed": false
+    },
+    {
+      "id": 4,
+      "ep_number": 8,
+      "title": "La herida del padre ausente o emocionalmente inaccesible: Dejar de buscar la aprobación de un fantasma y construir tu propio estándar",
+      "research_done": false,
+      "research_url": null,
+      "script_done": false,
+      "script_approved": false,
+      "script_url": null,
+      "script_file_id": null,
+      "social_done": false,
+      "social_url": null,
+      "completed": false
+    },
+    {
+      "id": 5,
+      "ep_number": 9,
+      "title": "Más allá del 'macho alfa' y la culpa: Cómo reconstruir una masculinidad con carácter, límites claros y corazón abierto",
+      "research_done": false,
+      "research_url": null,
+      "script_done": false,
+      "script_approved": false,
+      "script_url": null,
+      "script_file_id": null,
+      "social_done": false,
+      "social_url": null,
+      "completed": false
+    }
+  ]
+}

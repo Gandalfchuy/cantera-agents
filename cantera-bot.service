@@ -1,0 +1,19 @@
+[Unit]
+Description=La Cantera Bot Orchestrator (Telegram & AI Agents)
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/cantera
+EnvironmentFile=/root/cantera/.env
+ExecStart=/root/cantera/.venv/bin/python /root/cantera/bot_orchestrator.py
+Restart=always
+RestartSec=5
+
+# Límites y logs
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
