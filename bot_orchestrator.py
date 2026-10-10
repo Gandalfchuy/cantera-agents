@@ -48,16 +48,24 @@ STATE_FILE = "orchestrator_state.json"
 # --- PERSISTENCIA DE ESTADO ---
 def load_state() -> Dict[str, Any]:
     if os.path.exists(STATE_FILE):
+        if os.path.isdir(STATE_FILE):
+            print(f"Aviso: {STATE_FILE} es un directorio. Usando estado en memoria.")
+            return {"niche_analysis_done": False, "topics": []}
         try:
             with open(STATE_FILE, "r", encoding="utf-8") as f:
                 return json.load(f)
         except Exception as e:
-            print(f"Error cargando estado: {e}")
+            print(f"Error cargando {STATE_FILE}: {e}")
     return {"niche_analysis_done": False, "topics": []}
 
 def save_state(state: Dict[str, Any]):
-    with open(STATE_FILE, "w", encoding="utf-8") as f:
-        json.dump(state, f, ensure_ascii=False, indent=2)
+    if os.path.exists(STATE_FILE) and os.path.isdir(STATE_FILE):
+        return
+    try:
+        with open(STATE_FILE, "w", encoding="utf-8") as f:
+            json.dump(state, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f"Error guardando {STATE_FILE}: {e}")
 
 def are_all_topics_completed(topics: List[Dict[str, Any]]) -> bool:
     if not topics:
@@ -565,19 +573,31 @@ def procesar_callback(data: str, cb_id: str):
         send_telegram(texto, reply_markup=teclado)
 
 def main():
-    print("Iniciando Orquestador de Telegram con Reglas Estrictas de Lote...")
-    
+    print("=== INICIANDO ORQUESTADOR LA CANTERA ===", flush=True)
+    print(f"Token Telegram configurado: {'SI' if TELEGRAM_BOT_TOKEN else 'NO (VACIO)'}", flush=True)
+    print(f"Chat ID configurado: {'SI' if AUTHORIZED_CHAT_ID else 'NO (VACIO)'}", flush=True)
+    print(f"Groq API Key configurada: {'SI' if GROQ_API_KEY else 'NO (VACIO)'}", flush=True)
+    print(f"Apps Script URL configurada: {'SI' if APPS_SCRIPT_URL else 'NO (VACIO)'}", flush=True)
+
     # Iniciar servidor de Healthcheck HTTP para Coolify (puerto 8080)
     try:
         t_health = threading.Thread(target=run_health_server, daemon=True)
         t_health.start()
-        print("Servidor HTTP de Health Check activo en puerto 8080 para Coolify.")
+        print("Servidor HTTP de Health Check activo en puerto 8080 para Coolify.", flush=True)
     except Exception as e:
-        print(f"Aviso health server: {e}")
+        print(f"Aviso health server: {e}", flush=True)
+
+    if not TELEGRAM_BOT_TOKEN:
+        print("ADVERTENCIA: TELEGRAM_BOT_TOKEN está vacío. Revisa la pestaña 'Environment Variables' en Coolify.", flush=True)
+        while True:
+            time.sleep(30)
 
     offset = 0
-    texto, teclado = build_main_menu()
-    send_telegram(texto, reply_markup=teclado)
+    try:
+        texto, teclado = build_main_menu()
+        send_telegram(texto, reply_markup=teclado)
+    except Exception as e:
+        print(f"Aviso inicial menú: {e}", flush=True)
 
     while True:
         try:
@@ -595,9 +615,11 @@ def main():
                         cb = u["callback_query"]
                         if str(cb["from"]["id"]) == AUTHORIZED_CHAT_ID:
                             procesar_callback(cb["data"], cb["id"])
+            elif r.status_code != 200:
+                print(f"Respuesta getUpdates: {r.status_code} - {r.text}", flush=True)
             time.sleep(1)
         except Exception as e:
-            print(f"Error en loop: {e}")
+            print(f"Error en loop: {e}", flush=True)
             time.sleep(3)
 
 if __name__ == "__main__":
