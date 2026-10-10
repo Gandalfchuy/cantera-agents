@@ -11,7 +11,24 @@ import sys
 import time
 import json
 import requests
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Dict, Any, Optional, List
+
+# --- HEALTH CHECK HTTP SERVER (Para Coolify / Docker) ---
+class HealthHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/plain")
+        self.end_headers()
+        self.wfile.write(b"OK")
+    def log_message(self, format, *args):
+        pass  # Silenciar logs
+
+def run_health_server():
+    port = int(os.getenv("PORT", 8080))
+    server = HTTPServer(("0.0.0.0", port), HealthHandler)
+    server.serve_forever()
 
 # --- CONFIGURACIÓN ---
 try:
@@ -549,6 +566,15 @@ def procesar_callback(data: str, cb_id: str):
 
 def main():
     print("Iniciando Orquestador de Telegram con Reglas Estrictas de Lote...")
+    
+    # Iniciar servidor de Healthcheck HTTP para Coolify (puerto 8080)
+    try:
+        t_health = threading.Thread(target=run_health_server, daemon=True)
+        t_health.start()
+        print("Servidor HTTP de Health Check activo en puerto 8080 para Coolify.")
+    except Exception as e:
+        print(f"Aviso health server: {e}")
+
     offset = 0
     texto, teclado = build_main_menu()
     send_telegram(texto, reply_markup=teclado)
